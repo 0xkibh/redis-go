@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"os"
 )
 
 func main(){
@@ -12,24 +13,30 @@ func main(){
 		fmt.Println(err)
 		return
 	}
-	conn, err := l.Accept()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
 
-	defer conn.Close() // close connection once finished
 
 	// infinite loop to read and write response
 	for {
-		buf := make([]byte, 1024)
-
-		_, err := conn.Read(buf)
+		conn, err := l.Accept()
 		if err != nil {
 			fmt.Println(err)
-			break
+			return
 		}
-
-		conn.Write([]byte("+PONG\r\n"))
+		go handleRequest(conn) // goroutine
+		
 	}
+}
+
+func handleRequest(conn net.Conn){
+	defer conn.Close() // close connection once finished
+
+	buf := make([]byte, 1024)
+
+	_, err := conn.Read(buf)
+	if err != nil {
+		fmt.Println("error reading from client: ",err.Error())
+		os.Exit(1)
+	}
+
+	conn.Write([]byte("+PONG\r\n"))
 }
