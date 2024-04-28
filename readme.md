@@ -16,8 +16,17 @@ sudo apt-get install redis
 sudo systemctl stop redis
 ```
 
+### Tests
+1. To make all test file executable 
+```
+chmod +x test/*.sh
+```
+
 
 ### To Know
 1. Redis use Redis Serialization Protocol (RESP) to communicate. It can be string, array, numbers or many other way. So, Redis recieves and send messages in RESP format. For example: String "OK" will be "+OK\r\n"
 
 Check out here for [more](https://redis.io/docs/latest/develop/reference/protocol-spec/)
+
+2. goroutine
+ou can refer to basic golang documents for this, for example, one item in Google search keyword goroutine is golang concurrency.
