@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strings"
 )
 
 func main(){
@@ -30,7 +31,7 @@ func main(){
 func handleRequest(conn net.Conn){
 	defer conn.Close() // close connection once finished
 
-	buf := make([]byte, 1024)
+	buf := make([]byte, 128)
 
 	_, err := conn.Read(buf)
 	if err != nil {
@@ -38,5 +39,20 @@ func handleRequest(conn net.Conn){
 		os.Exit(1)
 	}
 
-	conn.Write([]byte("+PONG\r\n"))
+	commandArray := strings.Split(string(buf), "\r\n")
+	if commandArray[2] == "PING" || commandArray[2] == "ping" {
+		conn.Write([]byte("+PONG\r\n"))
+	} else if (commandArray[2] == "ECHO" || commandArray[2] == "echo") {
+		if (len(commandArray)>4){
+		msg := fmt.Sprintf("+%s\r\n", commandArray[4])
+		conn.Write([]byte(msg))
+		}else{
+			conn.Write([]byte("+NO MESSAGE WITH ECHO!\r\n"))
+		}
+	} else{
+		conn.Write([]byte("+WRONG COMMAND!\r\n"))
+	}
+	
+
+	
 }
