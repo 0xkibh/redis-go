@@ -33,6 +33,8 @@ ou can refer to basic golang documents for this, for example, one item in Google
 
 3. Redis command are case-insensitive. `ECHO`, `echo` and `EcHo` are all valid commands.
 
+4. If the arguments are a list of .go files, build treats them as a list of source files specifying a single package.
+
 ### Possible Queries
 1. Why we use `make([]byte, 128)` instead of `[128]byte`?
 
